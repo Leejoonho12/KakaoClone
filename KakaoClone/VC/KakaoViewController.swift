@@ -35,8 +35,7 @@ class KakaoViewController: UIViewController {
     
     override func loadView() {
         super.loadView()
-        
-//        UserDefaults.standard.removeObject(forKey: UserDefaultsKey.dialogListgpt.rawValue)
+        UserDefaults.standard.removeObject(forKey: UserDefaultsKey.dialogListgpt.rawValue)
     }
     
     override func viewDidLoad() {
@@ -255,11 +254,13 @@ extension KakaoViewController: UITextViewDelegate {
 
 extension KakaoViewController {
     func askToGPT(_ text: String) {
-        var returnText = ""
+        print("before")
+        var returnText = "baseText"
         let url = URL(string: "https://api.openai.com/v1/chat/completions")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue("Bearer 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", forHTTPHeaderField: "Authorization")
+        let apiKey = Secrets.openaiApiKey
+        request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         let inputData = ["model": "gpt-3.5-turbo", "messages": [["role": "user", "content": text]]] as [String : Any]
         let jsonData = try? JSONSerialization.data(withJSONObject: inputData)
@@ -291,7 +292,7 @@ extension KakaoViewController {
         
         _ = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) {
             if task.state == .completed {
-//                self.outputTextView.text = returnText
+                print("returnText == \(returnText)")
                 self.dialogDataManager.addGPTTextDialog(returnText)
                 self.dialogTableView.reloadData()
                 self.scrollToBottomRow()

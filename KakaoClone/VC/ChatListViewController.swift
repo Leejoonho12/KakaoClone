@@ -15,11 +15,6 @@ class ChatListViewController: UITableViewController{
         return cell
     }
     
-//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        tableView.deselectRow(at: indexPath, animated: true)
-//        opid = indexPath.row
-//    }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let cell = sender as? ChatViewCell,
               let label = cell.cellLabel else { return }
@@ -30,6 +25,7 @@ class ChatListViewController: UITableViewController{
                 } else {
                     vc.opponentID = 2
                 }
+                self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
             }
         }
     }
