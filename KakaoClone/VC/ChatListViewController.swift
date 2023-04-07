@@ -3,8 +3,6 @@ import UIKit
 
 class ChatListViewController: UITableViewController{
     
-    var opid: Int = 0
-    
     let chatRoomList: [String] = ["여자", "GPT"]
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -17,17 +15,21 @@ class ChatListViewController: UITableViewController{
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        print(1)
-        opid = indexPath.row
-    }
+//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        tableView.deselectRow(at: indexPath, animated: true)
+//        opid = indexPath.row
+//    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print(2)
+        guard let cell = sender as? ChatViewCell,
+              let label = cell.cellLabel else { return }
         if segue.identifier == "chatSegue" {
             if let vc = segue.destination as? KakaoViewController {
-                vc.opponentID = opid
+                if label.text == "여자"{
+                    vc.opponentID = 1
+                } else {
+                    vc.opponentID = 2
+                }
             }
         }
     }

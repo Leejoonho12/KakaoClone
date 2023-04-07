@@ -3,7 +3,7 @@ import PhotosUI
 
 class KakaoViewController: UIViewController {
     
-    var opponentID: Int = 2
+    var opponentID: Int = 1
     
     private var dialogDataManager = DialogDataManager()
     private var userDataManager = UserDataManager()
@@ -36,15 +36,13 @@ class KakaoViewController: UIViewController {
     override func loadView() {
         super.loadView()
         
-        UserDefaults.standard.removeObject(forKey: UserDefaultsKey.dialogListgpt.rawValue)
+//        UserDefaults.standard.removeObject(forKey: UserDefaultsKey.dialogListgpt.rawValue)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(3)
-        print(opponentID)
-        
+        setUser()
         
         textView.delegate = self
         dialogTableView.dataSource = dialogDataSourceProvider
@@ -68,7 +66,15 @@ class KakaoViewController: UIViewController {
         
     }
     
-    // MARK: register
+    func setUser() {
+        if opponentID == 1{
+            dialogDataManager.userDefaultKey = .dialogList
+        } else {
+            dialogDataManager.userDefaultKey = .dialogListgpt
+        }
+    }
+    
+
     func registerCustomCell() { // 커스텀셀을 등록하는 부분
         dialogTableView.register(UINib(nibName: "MyDialogTableViewCell", bundle: nil), forCellReuseIdentifier: "MyDialogTableViewCell") // 새 tableViewCell을 만드는데 사용할 클래스 등록
         dialogTableView.register(UINib(nibName: "OpponentDialogTableViewCell", bundle: nil), forCellReuseIdentifier: "OpponentDialogTableViewCell")
@@ -128,9 +134,11 @@ extension KakaoViewController: UISearchBarDelegate {
         checkIndexPathBarButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(leftBarBtnTapped))
         searchBarButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(rightBarBtnTapped))
         cancelBarButton = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(rightBarBtnTapped))
+        let backBarButton = UIBarButtonItem(title: "??", style: .plain, target: self, action: nil)
         checkIndexPathBarButton?.tintColor = .lightGray
         searchBarButton?.tintColor = .lightGray
         cancelBarButton?.tintColor = .lightGray
+        self.navigationItem.backBarButtonItem = backBarButton
         self.navigationItem.setRightBarButton(searchBarButton, animated: true)
     }
     

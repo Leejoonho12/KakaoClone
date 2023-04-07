@@ -15,6 +15,8 @@ public class DialogDataManager {
     public var opponentID: Int = OPPONENT_ID
     public var gptID: Int = GPT_ID
     
+    var userDefaultKey: UserDefaultsKey = .dialogList
+    
     let userDefaults = UserDefaults.standard
     
     public var dialogList: [Dialog] = []
@@ -28,12 +30,16 @@ public class DialogDataManager {
     
     func saveDialog(_ dialogList: [Dialog]) {
         let encodeedData = dialogList.map{ try! JSONEncoder().encode($0) }
-        userDefaults.set(encodeedData, forKey: UserDefaultsKey.dialogListgpt.rawValue)
+        userDefaults.set(encodeedData, forKey: userDefaultKey.rawValue)
     }
     
     func loadDialog() -> [Dialog] {
-        guard let data = userDefaults.array(forKey: UserDefaultsKey.dialogListgpt.rawValue) as? [Data] else {
-            return [dummyDialogList3]
+        guard let data = userDefaults.array(forKey: userDefaultKey.rawValue) as? [Data] else {
+            if userDefaultKey == .dialogList{
+                return [dummyDialogList2]
+            } else {
+                return [dummyDialogList3]
+            }
         }
         let decodedData = data.map{ try! JSONDecoder().decode(Dialog.self, from: $0) }
         return decodedData

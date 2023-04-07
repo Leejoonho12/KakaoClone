@@ -2,8 +2,8 @@ import Foundation
 import UIKit
 
 var man = User(id: 1, userName: "남자")
-var woman =  User(id: 2, userName: "여자")
-var otherPeople = User(id: 3, userName: "ChatGPT")
+var woman =  User(id: 2, userName: "여자", profileImageURL: "태연")
+var otherPeople = User(id: 3, userName: "ChatGPT", profileImageURL: "gpt")
 
 var message1 = MessageContent(senderID: man.id, textContent: "안녕하세요. 저는 남자입니다.")
 var message2 = MessageContent(senderID: man.id, textContent: "저기요?")
