@@ -259,7 +259,7 @@ extension KakaoViewController {
         let url = URL(string: "https://api.openai.com/v1/chat/completions")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        let apiKey = ApiKey().apiKey
+        let apiKey = ""
         request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         let inputData = ["model": "gpt-3.5-turbo", "messages": [["role": "user", "content": text]]] as [String : Any]
