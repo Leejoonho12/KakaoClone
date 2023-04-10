@@ -107,4 +107,7 @@ iOSInjectionProject/
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 # End of https://www.toptal.com/developers/gitignore/api/swift,xcode,cocoapods
-Secret.swift
+
+
+# file: .gitignore
+Secret
