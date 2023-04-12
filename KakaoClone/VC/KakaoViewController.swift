@@ -255,8 +255,24 @@ extension KakaoViewController: UITextViewDelegate {
     }
 }
 
+/*
+ api통신정리
+ url리퀘스트를 만들어서 url, header, body, apikey, method등등 을 추가해서 urlsession의 dataTask함수에 담아서 보낸다.
+ 응답이 오면 completionhandler가 data?, response?, error? 를 가져오는데 response의 스테이터스코드로 통신 결과도
+ 확인 할 수 있고 한 모양이다. 여긴 더 알아보고 data에 응답데이터가 담겨있는데 이걸 받아와서 원하는 타입으로 캐스팅 해주면 끝.
+ error는 어떻게 써야 할 지 알아봐야 한다. 비동기로 처리되고 시간이 좀 걸리다보니 데이터를 받아온 시점을 알기위해서 result타입을 사용했다.
+ 
+ 1. 리퀘스트 생성 및 세팅
+ 2. dataTask실행해서 리스폰스랑 에러를 넘겨주고 result에 데이터나 에러를 담아서 탈출
+ 3. result에 있는 데이터를 바인딩 하고 에러처리
+ 4. 테이블뷰에 뿌려주기.
+ 
+ 바인딩 하는 부분을 따로 빼려고 했지만 여기서 에러처리 하면 안된다고 에러나서 보류. 재시도 해봐야 함.
+ */
 extension KakaoViewController {
-    
+    // traillingclosure에 성공시 데이터바인딩
+    // 결국 뷰컨에... 다른 클래스에서 할 수 있는 방법 마저 알아보기
+    // 다음작업: 강제추출 제거. 통신부분 다 고치고 감 잡고 전체적인 리팩토링 ㄱㄱ
     func askToGPT(QuestionContent: String) {
         let request: URLRequest = ApiService.shared.makeRequest(requestType: .chatGpt(QuestionContent))
         ApiService.shared.getResponseValue(request: request){ result in
@@ -277,7 +293,7 @@ extension KakaoViewController {
             }
         }
     }
-
+    // api통신 결과를 가지고 테이블뷰에 추가. 메인쓰레드에서 실행되어야 한다는 경고문이 떠서 dispatchqueue 사용.
     func reloadTeableView(returnText: String) {
         DispatchQueue.main.async {
             self.dialogDataManager.addGPTTextDialog(returnText)
