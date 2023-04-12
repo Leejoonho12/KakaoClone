@@ -8,5 +8,5 @@ target 'KakaoClone' do
   # Pods for KakaoClone
   pod 'SnapKit', '~> 5.0.0'
   pod 'Then'
-
+  pod 'Alamofire'
 end

@@ -22,7 +22,7 @@ public class DialogDataManager {
     public var dialogList: [Dialog] = []
     
     lazy var opponentIndex = dialogList.firstIndex(where: {$0.opponent.id == opponentID}) ?? 0
-    public lazy var dialog = dialogList [opponentIndex] {
+    public lazy var dialog = dialogList[opponentIndex] {
         didSet {
             dialogList[opponentIndex] = dialog
         }

@@ -1,12 +1,15 @@
 import UIKit
 import PhotosUI
+import Alamofire
 
 class KakaoViewController: UIViewController {
     
+    static let kc = KakaoViewController()
+    
     var opponentID: Int = 1
     
-    private var dialogDataManager = DialogDataManager()
-    private var userDataManager = UserDataManager()
+    var dialogDataManager = DialogDataManager()
+    var userDataManager = UserDataManager()
     private lazy var dialogDataSourceProvider = DialogDataSourceProvider(userDataManager: userDataManager, dialogDataManager: dialogDataManager)
     
     var searchBarButton: UIBarButtonItem?
@@ -84,7 +87,7 @@ class KakaoViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardToggleAnimate), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    func setUpGestureRecognizer(willTapView: UIView) { //탭제스처를 관리하는 부분인데 다시 찾아봐야 한다.
+    func setUpGestureRecognizer(willTapView: UIView) { //didTapAnyView메스드를 이용해 텍스트뷰를 편집종료 상태로 만들어 키보드 숨김
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapAnyView))
         tapGestureRecognizer.cancelsTouchesInView = false
         willTapView.addGestureRecognizer(tapGestureRecognizer)
@@ -211,7 +214,7 @@ extension KakaoViewController {
         scrollToBottomRow()
         initBottomInputView()
         if opponentID == 2{
-            askToGPT(text)
+            askToGPT(QuestionContent: text)
         }
     }
     
@@ -253,54 +256,36 @@ extension KakaoViewController: UITextViewDelegate {
 }
 
 extension KakaoViewController {
-    func askToGPT(_ text: String) {
-        print("before")
-        var returnText = "baseText"
-        let url = URL(string: "https://api.openai.com/v1/chat/completions")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-//        let apiKey = ApiKey.apiKey
-        request.setValue("Bearer \(ApiKey.apiKey)", forHTTPHeaderField: "Authorization")
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        let inputData = ["model": "gpt-3.5-turbo", "messages": [["role": "user", "content": text]]] as [String : Any]
-        let jsonData = try? JSONSerialization.data(withJSONObject: inputData)
-        request.httpBody = jsonData
-        let session = URLSession.shared
-        let task = session.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("Error: \(error)")
-                return
-            }
-            guard let httpResponse = response as? HTTPURLResponse else { return }
-            guard (200...299).contains(httpResponse.statusCode) else { return }
-            guard let data = data else { return }
-            do {
-                let responseJson = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-                if let choices = responseJson?["choices"] as? [[String: Any]] {
-                    for choice in choices {
-                        if let message = choice["message"] as? [String: Any], let content = message["content"] as? String {
-                            returnText = content
-                            print("Response message: \(content)")
-                        }
-                    }
+    
+    func askToGPT(QuestionContent: String) {
+        let request: URLRequest = ApiService.shared.makeRequest(requestType: .chatGpt(QuestionContent))
+        ApiService.shared.getResponseValue(request: request){ result in
+            switch result {
+            case .success(let data):
+                do {
+                    let responseJson = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+                    guard let choices = responseJson?["choices"] as? [[String: Any]],
+                          let message = choices.first?["message"] as? [String: Any],
+                          let content = message["content"] as? String else { return }
+                    print("returnMessage = \(content)")
+                    self.reloadTeableView(returnText: content)
+                } catch {
+                    print("Error: \(error)")
                 }
-            } catch {
-                print("Error decoding JSON response: \(error)")
-            }
-        }
-        task.resume()
-        
-        _ = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) {
-            if task.state == .completed {
-                print("returnText == \(returnText)")
-                self.dialogDataManager.addGPTTextDialog(returnText)
-                self.dialogTableView.reloadData()
-                self.scrollToBottomRow()
-                self.initBottomInputView()
-                $0.invalidate()
+            case .failure(let error):
+                print(error)
             }
         }
     }
+
+    func reloadTeableView(returnText: String) {
+        DispatchQueue.main.async {
+            self.dialogDataManager.addGPTTextDialog(returnText)
+            self.dialogTableView.reloadData()
+            self.initBottomInputView()
+        }
+    }
+    
 }
 
 extension KakaoViewController {
@@ -319,14 +304,14 @@ extension KakaoViewController {
             dialogTableView.contentInset.top = .zero
         default:
             break
-        } // MARK: layoutIfNeeded
-        self.view.layoutIfNeeded()
+        }
+        self.view.layoutIfNeeded() // UI를 업데이트 하라는 queue에 뒷쪽에 넣는것이 아니라, 맨 앞쪽에 넣어서 곧바로 UI가 변경되기를 기대할수있는 메소드.
     }
     
     @objc
     func didTapAnyView() { // 여기도 다시 봐야 한다.
-        if textView.isFirstResponder { // MARK: isFirstResponder
-            textView.resignFirstResponder()
+        if textView.isFirstResponder { //첫번째 응답자라면(입력가능한 상태)
+            textView.resignFirstResponder() // 첫번째 응답자 상태 사임(입력 불가능한 상태)
         }
     }
     

@@ -31,6 +31,7 @@
 		0465AC8429DD436000A54C77 /* MyDialogTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0465AC8229DD436000A54C77 /* MyDialogTableViewCell.xib */; };
 		0465AC8729DD511F00A54C77 /* OpponentDialogTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0465AC8529DD511F00A54C77 /* OpponentDialogTableViewCell.swift */; };
 		0465AC8829DD511F00A54C77 /* OpponentDialogTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0465AC8629DD511F00A54C77 /* OpponentDialogTableViewCell.xib */; };
+		04AABCD429E5651700903ED5 /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AABCD329E5651700903ED5 /* ApiService.swift */; };
 		04FD40F729DFE79500679238 /* ChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FD40F629DFE79500679238 /* ChatListViewController.swift */; };
 		04FD40FF29E396D100679238 /* ApiKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FD40FE29E396D100679238 /* ApiKeys.swift */; };
 		7D9EBDD8244F142E0F07948D /* Pods_KakaoClone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6513D2CDE764EB1A9B42D195 /* Pods_KakaoClone.framework */; };
@@ -63,6 +64,7 @@
 		0465AC8229DD436000A54C77 /* MyDialogTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyDialogTableViewCell.xib; sourceTree = "<group>"; };
 		0465AC8529DD511F00A54C77 /* OpponentDialogTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpponentDialogTableViewCell.swift; sourceTree = "<group>"; };
 		0465AC8629DD511F00A54C77 /* OpponentDialogTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OpponentDialogTableViewCell.xib; sourceTree = "<group>"; };
+		04AABCD329E5651700903ED5 /* ApiService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ApiService.swift; path = Pods/ApiService.swift; sourceTree = SOURCE_ROOT; };
 		04FD40F629DFE79500679238 /* ChatListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListViewController.swift; sourceTree = "<group>"; };
 		04FD40FE29E396D100679238 /* ApiKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiKeys.swift; sourceTree = "<group>"; };
 		6513D2CDE764EB1A9B42D195 /* Pods_KakaoClone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KakaoClone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -125,11 +127,11 @@
 		0465AC4D29DBB5A500A54C77 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				04FD40FE29E396D100679238 /* ApiKeys.swift */,
 				0465AC5C29DBEE0700A54C77 /* DialogList.swift */,
 				0465AC5F29DBEE6000A54C77 /* User.swift */,
 				0465AC6129DBEEE700A54C77 /* MessageContent.swift */,
 				0465AC6529DBFB0000A54C77 /* UserDummyData.swift */,
-				04FD40FE29E396D100679238 /* ApiKeys.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -193,6 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				0465AC3D29DBB4EC00A54C77 /* KakaoViewController.swift */,
+				04AABCD329E5651700903ED5 /* ApiService.swift */,
 				04FD40F629DFE79500679238 /* ChatListViewController.swift */,
 			);
 			path = VC;
@@ -346,6 +349,7 @@
 				0465AC6829DBFD8E00A54C77 /* DialogDataSourceProvider.swift in Sources */,
 				0465AC6429DBFAA600A54C77 /* UserDataManager.swift in Sources */,
 				0465AC6229DBEEE700A54C77 /* MessageContent.swift in Sources */,
+				04AABCD429E5651700903ED5 /* ApiService.swift in Sources */,
 				0465AC7229DD363400A54C77 /* ContentLabel.swift in Sources */,
 				0465AC5D29DBEE0700A54C77 /* DialogList.swift in Sources */,
 				0465AC5729DBBA6900A54C77 /* SnapKitView.swift in Sources */,
